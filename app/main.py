@@ -11,6 +11,7 @@ import types
 import os
 
 
+# Initialize the FastAPI application
 app = FastAPI(title="Org Management Service")
 
 
