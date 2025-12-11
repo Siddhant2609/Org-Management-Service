@@ -37,7 +37,7 @@ jobs:
       - name: Start API (background)
         env:
           MONGO_URL: mongodb://localhost:27017
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: "ci_testing_secret_12345"
           REQUIRE_JWT_SECRET: '1'
         run: |
           # start uvicorn in the background for the test runner
@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         env:
           MONGO_URL: mongodb://localhost:27017
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: "ci_testing_secret_12345"
         run: |
           python -m pytest -q
 
