@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <style>
+    .box { fill:#ffffff; stroke:#2b6cb0; stroke-width:2; rx:8; }
+    .title { font: 600 16px/1.2 'Segoe UI', Arial, sans-serif; fill:#0b2b4a; }
+    .small { font: 14px/1.2 'Segoe UI', Arial, sans-serif; fill:#0b2b4a; }
+    .arrow { stroke:#2b6cb0; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b6cb0"/>
+    </marker>
+  </defs>
+
+  <!-- Client -->
+  <rect x="40" y="40" width="160" height="60" class="box"/>
+  <text x="120" y="70" text-anchor="middle" class="title">Client</text>
+  <text x="120" y="88" text-anchor="middle" class="small">(browser, curl, tests)</text>
+
+  <!-- API -->
+  <rect x="320" y="30" width="240" height="80" class="box"/>
+  <text x="440" y="55" text-anchor="middle" class="title">API</text>
+  <text x="440" y="75" text-anchor="middle" class="small">FastAPI + Uvicorn</text>
+  <text x="440" y="92" text-anchor="middle" class="small">JWT auth (env JWT_SECRET)</text>
+
+  <!-- Mongo -->
+  <rect x="640" y="20" width="220" height="120" class="box"/>
+  <text x="750" y="45" text-anchor="middle" class="title">MongoDB</text>
+  <text x="750" y="66" text-anchor="middle" class="small">master_db + per-tenant collections</text>
+
+  <!-- Master DB details -->
+  <rect x="660" y="110" width="180" height="110" class="box"/>
+  <text x="750" y="132" text-anchor="middle" class="small">master_db</text>
+  <text x="750" y="152" text-anchor="middle" class="small">• organizations (metadata)</text>
+  <text x="750" y="170" text-anchor="middle" class="small">• admins (hashed pw)</text>
+
+  <!-- Per-org collections note -->
+  <rect x="640" y="250" width="220" height="100" class="box"/>
+  <text x="750" y="280" text-anchor="middle" class="small">org_acme</text>
+  <text x="750" y="300" text-anchor="middle" class="small">org_otherorg</text>
+  <text x="750" y="320" text-anchor="middle" class="small">(per-tenant collections)</text>
+
+  <!-- Arrows -->
+  <path d="M200 70 L320 70" class="arrow"/>
+  <path d="M560 70 L640 70" class="arrow"/>
+  <path d="M560 70 L640 70" class="arrow"/>
+
+  <!-- API to master_db -->
+  <path d="M560 110 L660 110" class="arrow"/>
+  <!-- API to per-org -->
+  <path d="M560 280 L640 280" class="arrow"/>
+
+  <!-- Labels -->
+  <text x="380" y="20" class="small">Runtime data flow</text>
+
+</svg>

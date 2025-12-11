@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.adminCommand({ping:1})'" \
+          --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with ruff
+        run: |
+          ruff check .
+
+      - name: Start API (background)
+        env:
+          MONGO_URL: mongodb://localhost:27017
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          REQUIRE_JWT_SECRET: '1'
+        run: |
+          # start uvicorn in the background for the test runner
+          nohup python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+          # wait for health endpoint
+          for i in {1..20}; do
+            if curl -fsS http://localhost:8000/health >/dev/null 2>&1; then
+              echo "api healthy"; break
+            else
+              echo "waiting for api... ($i)"; sleep 1
+            fi
+          done
+
+      - name: Run tests
+        env:
+          MONGO_URL: mongodb://localhost:27017
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          python -m pytest -q
+
+      - name: Build Docker image (optional)
+        run: |
+          docker build -t org-management-service-api:ci .
